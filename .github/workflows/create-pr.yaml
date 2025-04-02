@@ -1,4 +1,4 @@
-name: Create Pull Request
+name: Criar Pull Request
 
 on:
   push
@@ -11,17 +11,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "PR automatizado"
-          title: "PR automatizado para ${{ github.ref_name }}"
-          body: |
-            Este é um PR automatizado para a branch ${{ github.ref_name }}.
-            Revise as mudanças e faça um merge se tudo estiver certo.
-          branch: ${{ github.ref_name }}
-          base: master
-          labels: |
-            pr-automatizado
-            a-ser-revisado
+      - name: Criar Pull Request
+        run: gh pr create -B master -H &{{ github.ref_name }} --title 'PR automatizado. Merge de ${{ github.ref_name }} com master.' --body 'PR automatizado criado por GitHub Actions.'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
