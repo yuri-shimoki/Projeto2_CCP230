@@ -1,5 +1,4 @@
 .gitignore
-.github/
 .vscode/
 *.exe
 database.txt
