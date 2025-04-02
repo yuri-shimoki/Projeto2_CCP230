@@ -1,69 +1,11 @@
 #include <stdio.h>
 
-
-int login(char* cpfDoUsuarioAtual)
-{
-
-}
-
-int exibirMenu(void)
-{
-
-}
-
-int exibirSaldo(void)
-{
-
-}
-
-int exibirExtrato(void)
-{
-
-}
-
-int depositarDinheiro(void)
-{
-
-}
-
-int sacarDinheiro(void)
-{
-
-}
-
-int comprarCriptomoeda(void)
-{
-        
-}
-
-int venderCriptomoeda(void)
-{
-
-}
-
-int atualizarCotacao(void)
-{
-
-}
-
-typedef enum
-{
-        LOGIN,
-        MENU,
-        SALDO,
-        EXTRATO,
-        DEPOSITO,
-        SAQUE,
-        COMPRA,
-        VENDA,
-        COTACAO,
-        SAIR
-} Menus;
+#include "funcoes_principais.h"
 
 int main(void)
 {
         Menus menuAtual = LOGIN;
-        char cpfDoUsuarioAtual[11];
+        char cpfDoUsuarioAtual[12];
         int codigoDeRetorno;
 
         FILE* bancoDeDados = fopen("database.bin", "rb+");
@@ -84,10 +26,27 @@ int main(void)
                 switch (menuAtual)
                 {
                 case LOGIN:
+                        codigoDeRetorno = login(bancoDeDados, cpfDoUsuarioAtual);
+                        switch (codigoDeRetorno)
+                        {
+                        case 0:
+                                // printf("Bem-vindo, %s.", obterUsuario(cpfDoUsuarioAtual)->nome);
+                                menuAtual = MENU;
+                                break;
+                        case 1:
+                                printf("[ERRO]: A entrada digitada nao e um CPF valido.\n\n");
+                                break;
+                        case 2:
+                                printf("[ERRO]: A entrada digitada nao e uma senha valida.\n\n");
+                                break;
+                        case 3:
+                                printf("[ERRO]: O CPF e senha digitados nao correspondem a um usuario existente.\n\n");
+                                break;
+                        }
 
                         break;
                 case MENU:
-
+                        codigoDeRetorno = exibirMenu();
                         break;
                 case SALDO:
 
