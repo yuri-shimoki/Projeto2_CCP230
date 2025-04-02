@@ -12,6 +12,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Criar Pull Request
-        run: gh pr create -B master -H &{{ github.ref_name }} --title 'PR automatizado. Merge de ${{ github.ref_name }} com master.' --body 'PR automatizado criado por GitHub Actions.'
+        run: gh pr create -B master -H ${{ github.ref_name }} --title 'PR automatizado. Merge de ${{ github.ref_name }} com master.' --body 'PR automatizado criado por GitHub Actions.'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
