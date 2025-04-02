@@ -18,7 +18,7 @@ int main(void)
                         return 1;
                 }
 
-                fseek(bancoDeDados, 0, SEEK_SET);
+                rewind(bancoDeDados);
         }
 
         do
@@ -49,7 +49,7 @@ int main(void)
                         codigoDeRetorno = exibirMenu();
                         break;
                 case SALDO:
-
+                        
                         break;
                 case EXTRATO:
 
