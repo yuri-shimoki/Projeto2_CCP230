@@ -6,7 +6,7 @@
 int main(void)
 {
         Menus menuAtual = LOGIN;
-        char cpfDoUsuarioAtual[12];
+        Usuario usuarioAtual;
         int codigoDeRetorno;
 
         FILE* bancoDeDados = fopen("database.bin", "rb+");
@@ -43,11 +43,11 @@ int main(void)
                 switch (menuAtual)
                 {
                 case LOGIN:
-                        codigoDeRetorno = login(bancoDeDados, cpfDoUsuarioAtual);
+                        codigoDeRetorno = login(bancoDeDados, listaDeUsuarios, &usuarioAtual);
                         switch (codigoDeRetorno)
                         {
                         case 0:
-                                // printf("Bem-vindo, %s.", obterUsuario(cpfDoUsuarioAtual)->nome);
+                                printf("Bem-vindo, %s.", usuarioAtual.nome);
                                 menuAtual = MENU;
                                 break;
                         case 1:

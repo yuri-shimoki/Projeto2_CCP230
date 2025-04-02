@@ -5,7 +5,7 @@
 #include "entrada.h"
 #include "banco_de_dados.h"
 
-int login(FILE* bancoDeDados, char* cpfDoUsuarioAtual)
+int login(ListaDeUsuarios* listaDeUsuarios, Usuario* usuarioAtual)
 {
         printf("Digite seu CPF (sem pontos ou traços) e sua senha.\nCPF: ");
         char cpfDigitado[12];
@@ -21,10 +21,12 @@ int login(FILE* bancoDeDados, char* cpfDoUsuarioAtual)
         if (checarPorStringDeDigitos(senhaDigitada, 8) == 1)
                 return 2;
 
-        if (checarExistenciaDoUsuario(bancoDeDados, cpfDigitado, senhaDigitada) == 1)
+        int indiceDoUsuarioAtual = checarExistenciaDoUsuario(listaDeUsuarios, cpfDigitado, senhaDigitada);
+
+        if (indiceDoUsuarioAtual == -1)
                 return 3;
         
-        strcpy(cpfDoUsuarioAtual, cpfDigitado);
+        *usuarioAtual = listaDeUsuarios->usuarios[indiceDoUsuarioAtual];
 
         return 0;
 }

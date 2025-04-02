@@ -6,8 +6,14 @@
 
 int checarExistenciaDoUsuario(ListaDeUsuarios* listaDeUsuarios, char* cpf, char* senha)
 {
-        // char buffer[255];
-        return 0;
+        for (int i = 0; i < 10; ++i)
+        {
+                if (strcmp(listaDeUsuarios->usuarios[i].cpf, cpf) == 0 &&
+                    strcmp(listaDeUsuarios->usuarios[i].senha, senha) == 0)
+                        return i;
+        }
+
+        return -1;
 }
 
 int carregarListaDeUsuarios(FILE* bancoDeDados, ListaDeUsuarios* listaDeUsuarios)
