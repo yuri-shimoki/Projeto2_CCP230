@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int checarExistenciaDoUsuario(ListaDeUsuarios* listaDeUsuarios, char* cpf, char* senha)
 {
@@ -27,20 +28,28 @@ int carregarListaDeUsuarios(FILE* bancoDeDados, ListaDeUsuarios* listaDeUsuarios
         return 0;
 }
 
-int carregarExtrato(FILE* arquivoDeExtratos, Extrato* extrato)
+int carregarExtrato(FILE* arquivoDeExtratos, char* cpf, Extrato* extrato)
 {
         extrato = (Extrato*) malloc(sizeof(Extrato));
 
         if (extrato == NULL)
                 return 1;
 
-        fread(extrato, sizeof(Extrato), 1, arquivoDeExtratos);
-        
-        if (ferror(arquivoDeExtratos) != 0)
-                return 2;
+        rewind(arquivoDeExtratos);
 
-        if (feof(arquivoDeExtratos) != 0)
-                return 3;
+        for (int i = 0; i < 10; ++i)
+        {
+                fread(extrato, sizeof(Extrato), 1, arquivoDeExtratos);
+
+                if (ferror(arquivoDeExtratos) != 0)
+                        return 2;
+
+                if (strcmp(extrato->cpf, cpf) == 0)
+                        break;
+
+                if (feof(arquivoDeExtratos) != 0)
+                        return 3;
+        }
 
         return 0;
 }

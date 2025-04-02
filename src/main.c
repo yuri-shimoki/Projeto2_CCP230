@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "funcoes_principais.h"
+#include "banco_de_dados.h"
 
 int main(void)
 {
@@ -20,6 +21,22 @@ int main(void)
 
                 rewind(bancoDeDados);
         }
+
+        FILE* arquivoDeExtratos = fopen("extratos.bin", "rb+");
+        if (arquivoDeExtratos == NULL)
+        {
+                arquivoDeExtratos = fopen("extratos.bin", "wb+");
+                if (arquivoDeExtratos == NULL)
+                {
+                        printf("[ERRO]: Nao foi possivel criar um arquivo de extratos. Terminando o programa.");
+                        return 1;
+                }
+
+                rewind(arquivoDeExtratos);
+        }
+
+        ListaDeUsuarios* listaDeUsuarios;
+        carregarListaDeUsuarios(bancoDeDados, listaDeUsuarios);
 
         do
         {

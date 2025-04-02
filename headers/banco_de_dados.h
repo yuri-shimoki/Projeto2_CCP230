@@ -21,10 +21,12 @@ typedef struct
 
 typedef struct
 {
+        char cpf[12];
         Transacao transacoes[100];
 } Extrato;
 
 int carregarListaDeUsuarios(FILE* bancoDeDados, ListaDeUsuarios* listaDeUsuarios);
-int carregarExtrato(FILE* arquivoDeExtratos, Extrato* extrato);
+int carregarExtrato(FILE* arquivoDeExtratos, char* cpf, Extrato* extrato);
+
 
 int checarExistenciaDoUsuario(ListaDeUsuarios* listaDeUsuarios, char* cpf, char* senha);
