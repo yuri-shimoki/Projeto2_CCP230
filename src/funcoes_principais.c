@@ -7,7 +7,7 @@
 
 int login(ListaDeUsuarios* listaDeUsuarios, Usuario* usuarioAtual)
 {
-        printf("Digite seu CPF (sem pontos ou traços) e sua senha.\nCPF: ");
+        printf("Digite seu CPF (sem pontos ou tracos) e sua senha.\nCPF: ");
         char cpfDigitado[12];
         scanf(" %11s", cpfDigitado);
 
@@ -33,5 +33,13 @@ int login(ListaDeUsuarios* listaDeUsuarios, Usuario* usuarioAtual)
 
 int exibirMenu(void)
 {
-        printf("Menu");
+        printf("--- [MENU PRINCIPAL] ---\n1. Exibir saldo\n2. Exibir extrato\n3. Depositar\n4. Sacar\n5. Comprar criptomoeda\n6.Vender criptomoeda\n7. Randomizar cotacao\n8. Sair\nDigite um numero de 1 a 8: ");
+
+        int entrada;
+        scanf("%i", &entrada);
+
+        if (entrada < 1 || entrada > 8)
+                return 9;
+        
+        return entrada;
 }

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <locale.h>
+#include <stdlib.h>
 
 #include "funcoes_principais.h"
 #include "banco_de_dados.h"
@@ -43,6 +44,11 @@ int main(void)
         int usuarioPossuiExtrato = 1;
         
         codigoDeRetorno = carregarListaDeUsuarios(bancoDeDados, listaDeUsuarios);
+
+        Usuario usuarioPadrao = { "00000000000\0", "00000000\0", "Usuario Temporario\0", 0.0f, 0.0f, 0.0f, 0.0f };
+        listaDeUsuarios->usuarios[0] = usuarioPadrao;
+        ++(listaDeUsuarios->quantidadeDeUsuarios);
+
         switch (codigoDeRetorno)
         {
         case 1:
@@ -52,6 +58,9 @@ int main(void)
                 printf("[ERRO]: Nao foi possivel ler o banco de dados.\n\n");
                 return 3;
         case 3:
+                printf("--- [AVISO] ---\nO banco de dados esta vazio. No entanto, o programa ira criar um usuario padrao para fins de teste.\nRemova esta funcionalidade quando for possivel registrar novos usuarios.\n\n");
+                break;
+        case 4:
                 printf("[ERRO]: O banco de dados possui mais que 10 usuarios.\n\n");
                 return 4;
         }
@@ -67,7 +76,7 @@ int main(void)
                         case 0:
                                 printf("Bem-vindo, %s.\n\n", usuarioAtual.nome);
 
-                                codigoDeRetorno = carregarExtrato(arquivoDeExtratos, usuarioAtual.cpf, &extrato);
+                                codigoDeRetorno = carregarExtrato(arquivoDeExtratos, usuarioAtual.cpf, extrato);
 
                                 switch (codigoDeRetorno)
                                 {
@@ -98,6 +107,15 @@ int main(void)
                         break;
                 case MENU:
                         codigoDeRetorno = exibirMenu();
+
+                        if (codigoDeRetorno == 9)
+                        {
+                                printf("[ERRO]: O numero digitado nao e um numero de 1 a 8. Pressione ENTER para continuar.\n\n");
+                                char c;
+                                scanf(" %c", &c);
+                        }
+
+                        menuAtual = codigoDeRetorno + 1;
                         break;
                 case SALDO:
                         
