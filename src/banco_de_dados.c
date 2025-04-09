@@ -168,5 +168,7 @@ int imprimirExtrato(Extrato* extrato)
                 );
         }
 
+        printf("\n");
+
         return 0;
 }
