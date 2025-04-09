@@ -10,8 +10,8 @@ typedef struct
 
 typedef struct
 {
-        unsigned int quantidadeDeUsuarios;
         Usuario usuarios[10];
+        unsigned int quantidadeDeUsuarios;
 } ListaDeUsuarios;
 
 typedef struct

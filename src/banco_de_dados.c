@@ -7,6 +7,8 @@
 
 int checarExistenciaDoUsuario(ListaDeUsuarios* listaDeUsuarios, char* cpf, char* senha)
 {
+        printf("cpf: %s\n\n", listaDeUsuarios->usuarios[0].cpf);
+
         for (int i = 0; i < 10; ++i)
         {
                 if (strcmp(listaDeUsuarios->usuarios[i].cpf, cpf) == 0 &&
@@ -25,12 +27,15 @@ int carregarListaDeUsuarios(FILE* bancoDeDados, ListaDeUsuarios* listaDeUsuarios
                 return 1;
 
         int elementosLidos = fread(listaDeUsuarios, sizeof(ListaDeUsuarios), 1, bancoDeDados);
-        
+
         if (ferror(bancoDeDados) != 0)
                 return 2;
 
-        if (listaDeUsuarios->quantidadeDeUsuarios > 10)
+        if (elementosLidos == 0 && feof(bancoDeDados) != 0)
                 return 3;
+
+        if (listaDeUsuarios->quantidadeDeUsuarios > 10)
+                return 4;
 
         return 0;
 }
@@ -193,6 +198,4 @@ void obterDataEHoraAtuais(char* data, char* hora)
 
         sprintf(data, "%02i-%02i-%04i", tm.tm_mday, tm.tm_mon, tm.tm_year);
         sprintf(hora, "%02i:%02i:%02i", tm.tm_hour, tm.tm_min, tm.tm_sec);
-        
-        return 0;
 }
