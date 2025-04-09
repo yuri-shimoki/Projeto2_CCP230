@@ -143,6 +143,11 @@ int main(void)
                 break;
         }
 
+        codigoDeRetorno = salvarListaDeUsuarios(bancoDeDados, listaDeUsuarios);
+
+        if (codigoDeRetorno == 1)
+                printf("[ERRO]: Nao foi possivel salvar o banco de dados.\n\n");
+
         free(extrato);
         free(listaDeUsuarios);
 
