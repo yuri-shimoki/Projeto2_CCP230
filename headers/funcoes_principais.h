@@ -22,7 +22,7 @@ int login(ListaDeUsuarios* listaDeUsuarios, Usuario* usuarioAtual);
 
 int exibirMenu(void);
 
-int exibirSaldo(void);
+void exibirSaldo(Usuario* usuarioAtual);
 
 int exibirExtrato(void);
 

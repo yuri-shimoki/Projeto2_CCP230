@@ -1,5 +1,6 @@
 #include "entrada.h"
 #include <ctype.h>
+#include <stdio.h>
 
 int checarPorStringDeDigitos(char* string, int comprimento)
 {
@@ -9,4 +10,11 @@ int checarPorStringDeDigitos(char* string, int comprimento)
                 else
                         return 1;
         return 0;
+}
+
+void pressioneEnterParaContinuar()
+{
+        printf("Pressione ENTER para continuar.\n");
+        while (getchar() != '\n');
+        getchar();
 }

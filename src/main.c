@@ -4,6 +4,7 @@
 
 #include "funcoes_principais.h"
 #include "banco_de_dados.h"
+#include "entrada.h"
 
 int main(void)
 {
@@ -112,32 +113,39 @@ int main(void)
                         {
                                 printf("[ERRO]: O numero digitado nao e um numero de 1 a 8. Pressione ENTER para continuar.\n\n");
                                 char c;
-                                scanf(" %c", &c);
+                                scanf("%*c%c", &c);
                         }
+                        printf("\n");
 
                         menuAtual = codigoDeRetorno + 1;
                         break;
                 case SALDO:
-                        
+                        exibirSaldo(&usuarioAtual);
+                        pressioneEnterParaContinuar();
+                        menuAtual = MENU;
                         break;
                 case EXTRATO:
-
+                        imprimirExtrato(extrato);
+                        pressioneEnterParaContinuar();
+                        menuAtual = MENU;
                         break;
                 case DEPOSITO:
 
+                        menuAtual = MENU;
                         break;
                 case SAQUE:
-
+                        menuAtual = MENU;
                         break;
                 case COMPRA:
-
+                        menuAtual = MENU;
                         break;
                 case VENDA:
-
+                        menuAtual = MENU;
                         break;
 
                 case COTACAO:
-
+                
+                        menuAtual = MENU;
                         break;
                 }
                 

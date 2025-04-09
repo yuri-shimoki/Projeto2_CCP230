@@ -170,6 +170,12 @@ int imprimirExtrato(Extrato* extrato)
 {
         Transacao transacaoAtual;
 
+        if (extrato->quantidadeDeTransacoes == 0)
+        {
+                printf("O usuario ainda nao realizou uma transacao.\n");
+                return 0;
+        }
+
         for (int i = extrato->quantidadeDeTransacoes - 1; i >= 0; --i)
         {
                 transacaoAtual = extrato->transacoes[i];
