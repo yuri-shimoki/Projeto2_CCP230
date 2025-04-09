@@ -28,7 +28,7 @@ int main(void)
                 arquivoDeExtratos = fopen("extratos.bin", "wb+");
                 if (arquivoDeExtratos == NULL)
                 {
-                        printf("[ERRO]: Nao foi possivel criar um arquivo de extratos. Terminando o programa.");
+                        printf("[ERRO]: Nao foi possivel criar um arquivo de extratos. Terminando o programa.\n\n");
                         return 1;
                 }
 
@@ -36,18 +36,49 @@ int main(void)
         }
 
         ListaDeUsuarios* listaDeUsuarios;
-        carregarListaDeUsuarios(bancoDeDados, listaDeUsuarios);
+        Extrato* extrato;
+        int usuarioPossuiExtrato = 1;
+        
+        codigoDeRetorno = carregarListaDeUsuarios(bancoDeDados, listaDeUsuarios);
+        switch (codigoDeRetorno)
+        {
+        case 1:
+                printf("[ERRO]: Nao foi possivel alocar espaco na memoria.\n\n");
+                return 2;
+        case 2:
+                printf("[ERRO]: Nao foi possivel ler o banco de dados.\n\n");
+                return 3;
+        case 3:
+                printf("[ERRO]: O banco de dados possui mais que 10 usuarios.\n\n");
+                return 4;
+        }
 
         do
         {
                 switch (menuAtual)
                 {
                 case LOGIN:
-                        codigoDeRetorno = login(bancoDeDados, listaDeUsuarios, &usuarioAtual);
+                        codigoDeRetorno = login(listaDeUsuarios, &usuarioAtual);
                         switch (codigoDeRetorno)
                         {
                         case 0:
-                                printf("Bem-vindo, %s.", usuarioAtual.nome);
+                                printf("Bem-vindo, %s.\n\n", usuarioAtual.nome);
+
+                                codigoDeRetorno = carregarExtrato(arquivoDeExtratos, usuarioAtual.cpf, &extrato);
+
+                                switch (codigoDeRetorno)
+                                {
+                                case 1:
+                                        printf("[ERRO]: Nao foi possivel alocar espaco na memoria.\n\n");
+                                        break;
+                                case 2:
+                                        printf("[ERRO]: Nao foi possivel abrir ou criar o arquivo de extratos.\n\n");
+                                        break;
+                                case 3:
+                                        usuarioPossuiExtrato = 0;
+                                        break;
+                                }
+
                                 menuAtual = MENU;
                                 break;
                         case 1:
@@ -91,6 +122,28 @@ int main(void)
                 
         } while (menuAtual != SAIR);
 
+        codigoDeRetorno = salvarExtrato(arquivoDeExtratos, extrato, usuarioPossuiExtrato);
+
+        switch (codigoDeRetorno)
+        {
+        case 1:
+                printf("[ERRO]: Nao foi possivel alocar espaco na memoria.\n\n");
+                break;
+        case 2:
+                printf("[ERRO]: Nao foi possivel ler ou escrever para o arquivo de extratos.\n\n");
+                break;
+        case 3:
+                printf("[ERRO]: Nao foi possivel encontrar o extrato do usuario no banco de dados.\n\n");
+                break;
+        case 4:
+                printf("[ERRO]: Um erro de logica ocorreu ao salvar o extrato.\n\n");
+                break;
+        }
+
+        free(extrato);
+        free(listaDeUsuarios);
+
+        fclose(arquivoDeExtratos);
         fclose(bancoDeDados);
 
         return 0;
