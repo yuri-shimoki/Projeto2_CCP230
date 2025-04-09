@@ -43,3 +43,8 @@ int exibirMenu(void)
         
         return entrada;
 }
+
+void exibirSaldo(Usuario* usuarioAtual)
+{
+        printf("Saldo:\nR$%.2f\n%.6f BTC\n%.6f ETH\n%.6f XRP\n\n", usuarioAtual->saldoReais, usuarioAtual->saldoBitcoin, usuarioAtual->saldoEthereum, usuarioAtual->saldoRipple);
+}
