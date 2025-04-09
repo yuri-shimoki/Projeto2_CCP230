@@ -7,8 +7,6 @@ int checarPorStringDeDigitos(char* string, int comprimento)
                 if (isdigit(string[i]))
                         continue;
                 else
-                {
                         return 1;
-                }
         return 0;
 }

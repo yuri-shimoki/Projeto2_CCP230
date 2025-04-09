@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 
+#include "banco_de_dados.h"
+
 typedef enum
 {
         LOGIN,
@@ -16,7 +18,7 @@ typedef enum
         SAIR
 } Menus;
 
-int login(FILE* bancoDeDados, char* cpfDoUsuarioAtual);
+int login(ListaDeUsuarios* listaDeUsuarios, Usuario* usuarioAtual);
 
 int exibirMenu(void);
 
