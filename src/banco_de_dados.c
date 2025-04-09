@@ -128,6 +128,18 @@ int salvarExtrato(FILE* arquivoDeExtratos, Extrato* extrato, int usuarioPossuiEx
         return 4;
 }
 
+int salvarListaDeUsuarios(FILE* bancoDeDados, ListaDeUsuarios* listaDeUsuarios)
+{
+        rewind(bancoDeDados);
+
+        fwrite(listaDeUsuarios, sizeof(ListaDeUsuarios), 1, bancoDeDados);
+
+        if (ferror(bancoDeDados) != 0)
+                return 1;
+                
+        return 0;
+}
+
 int registrarTransacao(Extrato* extrato, Transacao* transacao)
 {
         if (extrato->quantidadeDeTransacoes < 100)
