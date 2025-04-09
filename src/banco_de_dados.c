@@ -147,3 +147,26 @@ int registrarTransacao(Extrato* extrato, Transacao* transacao)
 
         return 0;
 }
+
+int imprimirExtrato(Extrato* extrato)
+{
+        Transacao transacaoAtual;
+
+        for (int i = 0; i < extrato->quantidadeDeTransacoes; ++i)
+        {
+                transacaoAtual = extrato->transacoes[i];
+                printf("%s %s %c %-13.6f %-8s R$%9.2f %13.6fBTC %13.6fETH %13.6fXRP\n",
+                        transacaoAtual.data,
+                        transacaoAtual.hora,
+                        transacaoAtual.tipo,
+                        transacaoAtual.valorDaTransacao,
+                        transacaoAtual.moeda,
+                        transacaoAtual.saldoReais,
+                        transacaoAtual.saldoBitcoin,
+                        transacaoAtual.saldoEthereum,
+                        transacaoAtual.saldoRipple
+                );
+        }
+
+        return 0;
+}

@@ -33,5 +33,6 @@ int carregarExtrato(FILE* arquivoDeExtratos, char* cpf, Extrato* extrato);
 int salvarExtrato(FILE* arquivoDeExtratos, Extrato* extrato, int usuarioPossuiExtrato);
 
 int registrarTransacao(Extrato* extrato, Transacao* transacao);
+int imprimirExtrato(Extrato* extrato);
 
 int checarExistenciaDoUsuario(ListaDeUsuarios* listaDeUsuarios, char* cpf, char* senha);
