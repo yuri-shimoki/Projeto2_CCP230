@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 int checarExistenciaDoUsuario(ListaDeUsuarios* listaDeUsuarios, char* cpf, char* senha)
 {
@@ -152,7 +153,7 @@ int imprimirExtrato(Extrato* extrato)
 {
         Transacao transacaoAtual;
 
-        for (int i = 0; i < extrato->quantidadeDeTransacoes; ++i)
+        for (int i = extrato->quantidadeDeTransacoes - 1; i >= 0; --i)
         {
                 transacaoAtual = extrato->transacoes[i];
                 printf("%s %s %c %-13.6f %-8s R$%9.2f %13.6fBTC %13.6fETH %13.6fXRP\n",
@@ -170,5 +171,16 @@ int imprimirExtrato(Extrato* extrato)
 
         printf("\n");
 
+        return 0;
+}
+
+void obterDataEHoraAtuais(char* data, char* hora)
+{
+        time_t t = time(NULL);
+        struct tm tm = *localtime(&t);
+
+        sprintf(data, "%02i-%02i-%04i", tm.tm_mday, tm.tm_mon, tm.tm_year);
+        sprintf(hora, "%02i:%02i:%02i", tm.tm_hour, tm.tm_min, tm.tm_sec);
+        
         return 0;
 }

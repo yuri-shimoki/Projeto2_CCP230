@@ -1,10 +1,13 @@
 #include <stdio.h>
+#include <locale.h>
 
 #include "funcoes_principais.h"
 #include "banco_de_dados.h"
 
 int main(void)
 {
+        setlocale(LC_TIME, "pt_BR.UTF-8");
+
         Menus menuAtual = LOGIN;
         Usuario usuarioAtual;
         int codigoDeRetorno;

@@ -36,3 +36,5 @@ int registrarTransacao(Extrato* extrato, Transacao* transacao);
 int imprimirExtrato(Extrato* extrato);
 
 int checarExistenciaDoUsuario(ListaDeUsuarios* listaDeUsuarios, char* cpf, char* senha);
+
+void obterDataEHoraAtuais(char* data, char* hora);
