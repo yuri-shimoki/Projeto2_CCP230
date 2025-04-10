@@ -16,7 +16,7 @@ typedef struct
 
 typedef struct
 {
-        char data[9], hora[9], tipo, moeda[9];
+        char data[11], hora[9], tipo, moeda[9];
         float valorDaTransacao, saldoReais, saldoBitcoin, saldoEthereum, saldoRipple;
 } Transacao;
 
@@ -34,7 +34,7 @@ int carregarExtrato(FILE* arquivoDeExtratos, char* cpf, Extrato* extrato);
 int salvarExtrato(FILE* arquivoDeExtratos, Extrato* extrato, int usuarioPossuiExtrato);
 
 int registrarTransacao(Extrato* extrato, Transacao* transacao);
-int imprimirExtrato(Extrato* extrato);
+void imprimirExtrato(Extrato* extrato);
 
 int checarExistenciaDoUsuario(ListaDeUsuarios* listaDeUsuarios, char* cpf, char* senha);
 
