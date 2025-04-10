@@ -16,32 +16,19 @@ int main(void)
         int codigoDeRetorno;
         Cotacao cotacao;
 
-        FILE* bancoDeDados = fopen("database.bin", "rb+");
-        if (bancoDeDados == NULL)
+        FILE* bancoDeDados;
+        codigoDeRetorno = abrirArquivo(&bancoDeDados, "database.bin");
+
+        FILE* arquivoDeExtratos;
+        codigoDeRetorno = abrirArquivo(&arquivoDeExtratos, "extrato.bin");
+
+        FILE* arquivoDeCotacao;
+        codigoDeRetorno = abrirArquivo(&arquivoDeCotacao, "cotacao.bin");
+
+        if (codigoDeRetorno == 1)
         {
-                bancoDeDados = fopen("database.bin", "wb+");
-                if (bancoDeDados == NULL)
-                {
-                        printf("[ERRO]: Nao foi possivel criar um banco de dados.\n");
-                        pressioneEnterParaContinuar();
-                        return 1;
-                }
-
-                rewind(bancoDeDados);
-        }
-
-        FILE* arquivoDeExtratos = fopen("extratos.bin", "rb+");
-        if (arquivoDeExtratos == NULL)
-        {
-                arquivoDeExtratos = fopen("extratos.bin", "wb+");
-                if (arquivoDeExtratos == NULL)
-                {
-                        printf("[ERRO]: Nao foi possivel criar um arquivo de extratos.\n\n");
-                        pressioneEnterParaContinuar();
-                        return 1;
-                }
-
-                rewind(arquivoDeExtratos);
+                printf("[ERRO]: Nao foi possivel abrir um ou mais arquivos de dados. Terminando o programa.\n\n");
+                return 1;
         }
 
         ListaDeUsuarios* listaDeUsuarios = (ListaDeUsuarios*) malloc(sizeof(ListaDeUsuarios));
@@ -74,6 +61,8 @@ int main(void)
                 return 4;
                 break;
         }
+
+        carregarCotacao(arquivoDeCotacao, &cotacao);
 
         do
         {
