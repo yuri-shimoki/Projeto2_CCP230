@@ -34,4 +34,4 @@ int comprarCriptomoeda(Usuario* usuarioAtual, Extrato* extrato, Cotacao* cotacao
 
 int venderCriptomoeda(Usuario* usuarioAtual, Extrato* extrato, Cotacao* cotacao);
 
-int atualizarCotacao(Cotacao* cotacao);
+void atualizarCotacao(Cotacao* cotacao);

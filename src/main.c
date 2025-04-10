@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <locale.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "funcoes_principais.h"
 #include "banco_de_dados.h"
@@ -9,6 +10,7 @@
 int main(void)
 {
         setlocale(LC_TIME, "pt_BR.UTF-8");
+        srand(time(NULL));
 
         Menus menuAtual = LOGIN;
         Usuario usuarioAtual;
@@ -234,7 +236,7 @@ int main(void)
                         break;
 
                 case COTACAO:
-                
+                        atualizarCotacao(&cotacao);
                         menuAtual = MENU;
                         break;
                 }

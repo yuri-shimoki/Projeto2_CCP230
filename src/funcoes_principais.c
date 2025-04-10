@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 #include "entrada.h"
 #include "banco_de_dados.h"
@@ -271,4 +272,28 @@ int venderCriptomoeda(Usuario* usuarioAtual, Extrato* extrato, Cotacao* cotacao)
         return 0;
 }
 
-int atualizarCotacao(Cotacao* cotacao);
+void atualizarCotacao(Cotacao* cotacao)
+{
+        float porcentagemDeMudanca;
+
+        printf("Cotacoes anteriores:\nBTC: %f\nETH: %f\nXRP: %f\n",
+                cotacao->cotacaoBitcoin,
+                cotacao->cotacaoEthereum,
+                cotacao->cotacaoRipple);
+
+        porcentagemDeMudanca = ((float)((rand() % 11) - 5))/100.0f;
+        cotacao->cotacaoBitcoin *= 1 + porcentagemDeMudanca;
+
+        porcentagemDeMudanca = ((float)((rand() % 11) - 5))/100.0f;
+        cotacao->cotacaoEthereum *= 1 + porcentagemDeMudanca;
+
+        porcentagemDeMudanca = ((float)((rand() % 11) - 5))/100.0f;
+        cotacao->cotacaoRipple *= 1 + porcentagemDeMudanca;
+
+        printf("-------------\nCotacoes novas:\nBTC: %f\nETH: %f\nXRP: %f\n\n",
+                cotacao->cotacaoBitcoin,
+                cotacao->cotacaoEthereum,
+                cotacao->cotacaoRipple);
+
+        pressioneEnterParaContinuar();
+}
