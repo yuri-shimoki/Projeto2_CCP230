@@ -27,6 +27,11 @@ typedef struct
         Transacao transacoes[100];
 } Extrato;
 
+typedef struct
+{
+        float cotacaoBitcoin, cotacaoEthereum, cotacaoRipple;
+} Cotacao;
+
 int carregarListaDeUsuarios(FILE* bancoDeDados, ListaDeUsuarios* listaDeUsuarios);
 int salvarUsuario(FILE* bancoDeDados, Usuario* usuarioAtual, int indiceDoUsuarioAtual, int quantidadeDeUsuarios);
 
@@ -36,6 +41,11 @@ int salvarExtrato(FILE* arquivoDeExtratos, Extrato* extrato, int usuarioPossuiEx
 int registrarTransacao(Extrato* extrato, Transacao* transacao);
 void imprimirExtrato(Extrato* extrato);
 
+int carregarCotacao(FILE* arquivoDeCotacao, Cotacao* cotacao);
+int salvarCotacao(FILE* arquivoDeCotacao, Cotacao* cotacao);
+
 int checarExistenciaDoUsuario(ListaDeUsuarios* listaDeUsuarios, char* cpf, char* senha);
+
+int abrirArquivo(FILE** arquivo, const char* nome);
 
 void obterDataEHoraAtuais(char* data, char* hora);

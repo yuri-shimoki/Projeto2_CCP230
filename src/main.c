@@ -14,33 +14,21 @@ int main(void)
         Usuario usuarioAtual;
         int indiceDoUsuarioAtual;
         int codigoDeRetorno;
+        Cotacao cotacao;
 
-        FILE* bancoDeDados = fopen("database.bin", "rb+");
-        if (bancoDeDados == NULL)
+        FILE* bancoDeDados;
+        codigoDeRetorno = abrirArquivo(&bancoDeDados, "database.bin");
+
+        FILE* arquivoDeExtratos;
+        codigoDeRetorno = abrirArquivo(&arquivoDeExtratos, "extratos.bin");
+
+        FILE* arquivoDeCotacao;
+        codigoDeRetorno = abrirArquivo(&arquivoDeCotacao, "cotacao.bin");
+
+        if (codigoDeRetorno == 1)
         {
-                bancoDeDados = fopen("database.bin", "wb+");
-                if (bancoDeDados == NULL)
-                {
-                        printf("[ERRO]: Nao foi possivel criar um banco de dados.\n");
-                        pressioneEnterParaContinuar();
-                        return 1;
-                }
-
-                rewind(bancoDeDados);
-        }
-
-        FILE* arquivoDeExtratos = fopen("extratos.bin", "rb+");
-        if (arquivoDeExtratos == NULL)
-        {
-                arquivoDeExtratos = fopen("extratos.bin", "wb+");
-                if (arquivoDeExtratos == NULL)
-                {
-                        printf("[ERRO]: Nao foi possivel criar um arquivo de extratos.\n\n");
-                        pressioneEnterParaContinuar();
-                        return 1;
-                }
-
-                rewind(arquivoDeExtratos);
+                printf("[ERRO]: Nao foi possivel abrir um ou mais arquivos de dados. Terminando o programa.\n\n");
+                return 1;
         }
 
         ListaDeUsuarios* listaDeUsuarios = (ListaDeUsuarios*) malloc(sizeof(ListaDeUsuarios));
@@ -60,7 +48,7 @@ int main(void)
                 return 2;
                 break;
         case 2:
-                printf("[ERRO]: Nao foi possivel ler o banco de dados.\n\n");
+                printf("[ERRO]: Nao foi possivel ler o banco de dados.\nTerminando o programa.\n\n");
                 pressioneEnterParaContinuar();
                 return 3;
                 break;
@@ -68,10 +56,19 @@ int main(void)
                 printf("--- [AVISO] ---\nO banco de dados esta vazio. No entanto, o programa ira criar um usuario padrao para fins de teste.\nRemova esta funcionalidade quando for possivel registrar novos usuarios.\n\n");
                 break;
         case 4:
-                printf("[ERRO]: O banco de dados possui mais que 10 usuarios.\n\n");
+                printf("[ERRO]: O banco de dados possui mais que 10 usuarios.\nTerminando o programa.\n\n");
                 pressioneEnterParaContinuar();
                 return 4;
                 break;
+        }
+
+        codigoDeRetorno = carregarCotacao(arquivoDeCotacao, &cotacao);
+
+        if (codigoDeRetorno == 1)
+        {
+                printf("[ERRO]: Nao foi possivel ler o arquivo de cotacao.\nTerminando o programa\n\n");
+                pressioneEnterParaContinuar();
+                return 5;
         }
 
         do
@@ -151,11 +148,11 @@ int main(void)
                                 menuAtual = SALDO;
                                 break;
                         case 1:
-                                printf("O valor digitado e invalido.\n\n");
+                                printf("[ERRO]: O valor digitado e invalido.\n\n");
                                 menuAtual = MENU;
                                 break;
                         case 2:
-                                printf("O valor de deposito nao pode ser negativo.\n\n");
+                                printf("[ERRO]: O valor de deposito nao pode ser negativo.\n\n");
                                 menuAtual = MENU;
                                 break;
                         }
@@ -169,27 +166,71 @@ int main(void)
                                 menuAtual = SALDO;
                                 break;
                         case 1:
-                                printf("O valor digitado e invalido.\n\n");
+                                printf("[ERRO]: O valor digitado e invalido.\n\n");
                                 pressioneEnterParaContinuar();
                                 menuAtual = MENU;
                                 break;
                         case 2:
-                                printf("O valor de saque nao pode ser negativo.\n\n");
+                                printf("[ERRO]: O valor de saque nao pode ser negativo.\n\n");
                                 pressioneEnterParaContinuar();
                                 menuAtual = MENU;
                                 break;
                         case 3:
-                                printf("O valor de saque nao pode exceder seu saldo.\n\n");
+                                printf("[ERRO]: O valor de saque nao pode exceder seu saldo.\n\n");
                                 pressioneEnterParaContinuar();
                                 menuAtual = MENU;
                                 break;
                         }
                         break;
                 case COMPRA:
-                        menuAtual = MENU;
+                        codigoDeRetorno = comprarCriptomoeda(&usuarioAtual, extrato, &cotacao);
+
+                        switch (codigoDeRetorno)
+                        {
+                        case 0:
+                                menuAtual = SALDO;
+                                break;
+                        case 1:
+                                printf("[ERRO]: O valor digitado nao e uma criptomoeda valida. Escolha entre Bitcoin, Ethereum ou Ripple.\n\n");
+                                pressioneEnterParaContinuar();
+                                menuAtual = MENU;
+                                break;
+                        case 2:
+                                printf("[ERRO]: O valor da compra nao pode ser negativo.\n\n");
+                                pressioneEnterParaContinuar();
+                                menuAtual = MENU;
+                                break;
+                        case 3:
+                                printf("[ERRO]: O valor da compra nao pode exceder seu saldo.\n\n");
+                                pressioneEnterParaContinuar();
+                                menuAtual = MENU;
+                                break;
+                        }
                         break;
                 case VENDA:
-                        menuAtual = MENU;
+                        codigoDeRetorno = venderCriptomoeda(&usuarioAtual, extrato, &cotacao);
+
+                        switch (codigoDeRetorno)
+                        {
+                        case 0:
+                                menuAtual = SALDO;
+                                break;
+                        case 1:
+                                printf("[ERRO]: O valor digitado nao e uma criptomoeda valida. Escolha entre Bitcoin, Ethereum ou Ripple.\n\n");
+                                pressioneEnterParaContinuar();
+                                menuAtual = MENU;
+                                break;
+                        case 2:
+                                printf("[ERRO]: O valor da compra nao pode ser negativo.\n\n");
+                                pressioneEnterParaContinuar();
+                                menuAtual = MENU;
+                                break;
+                        case 3:
+                                printf("[ERRO]: O valor da compra nao pode exceder seu saldo.\n\n");
+                                pressioneEnterParaContinuar();
+                                menuAtual = MENU;
+                                break;
+                        }
                         break;
 
                 case COTACAO:
@@ -223,9 +264,15 @@ int main(void)
         if (codigoDeRetorno == 1)
                 printf("[ERRO]: Nao foi possivel salvar o banco de dados.\n\n");
 
+        codigoDeRetorno = salvarCotacao(arquivoDeCotacao, &cotacao);
+
+        if (codigoDeRetorno == 1)
+                printf("[ERRO]: Nao foi possivel salvar a cotacao.\n\n");
+
         free(extrato);
         free(listaDeUsuarios);
 
+        fclose(arquivoDeCotacao);
         fclose(arquivoDeExtratos);
         fclose(bancoDeDados);
 

@@ -30,8 +30,8 @@ int depositarDinheiro(Usuario* usuarioAtual, Extrato* extrato);
 
 int sacarDinheiro(Usuario* usuarioAtual, Extrato* extrato);
 
-int comprarCriptomoeda(Usuario* usuarioAtual, Extrato* extrato);
+int comprarCriptomoeda(Usuario* usuarioAtual, Extrato* extrato, Cotacao* cotacao);
 
-int venderCriptomoeda(Usuario* usuarioAtual, Extrato* extrato);
+int venderCriptomoeda(Usuario* usuarioAtual, Extrato* extrato, Cotacao* cotacao);
 
-int atualizarCotacao(void);
+int atualizarCotacao(Cotacao* cotacao);

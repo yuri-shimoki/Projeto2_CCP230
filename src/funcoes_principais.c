@@ -1,6 +1,7 @@
 #include "funcoes_principais.h"
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "entrada.h"
 #include "banco_de_dados.h"
@@ -49,7 +50,13 @@ int exibirMenu(void)
 
 void exibirSaldo(Usuario* usuarioAtual)
 {
-        printf("Saldo:\nR$%.2f\n%.6f BTC\n%.6f ETH\n%.6f XRP\n\n", usuarioAtual->saldoReais, usuarioAtual->saldoBitcoin, usuarioAtual->saldoEthereum, usuarioAtual->saldoRipple);
+        printf("Nome: %s\nCPF: %s\nSaldo:\n- R$%.2f\n- %.6f BTC\n- %.6f ETH\n- %.6f XRP\n\n",
+                usuarioAtual->nome,
+                usuarioAtual->cpf,
+                usuarioAtual->saldoReais,
+                usuarioAtual->saldoBitcoin,
+                usuarioAtual->saldoEthereum,
+                usuarioAtual->saldoRipple);
 }
 
 int depositarDinheiro(Usuario* usuarioAtual, Extrato* extrato)
@@ -119,8 +126,149 @@ int sacarDinheiro(Usuario* usuarioAtual, Extrato* extrato)
         return 0;
 }
 
-int comprarCriptomoeda(Usuario* usuarioAtual, Extrato* extrato);
+int comprarCriptomoeda(Usuario* usuarioAtual, Extrato* extrato, Cotacao* cotacao)
+{
+        printf("Digite qual criptomoeda deseja comprar (Bitcoin, Ethereum ou Ripple): ");
+        char criptomoeda[9];
+        int retorno = scanf("%8s", criptomoeda);
 
-int venderCriptomoeda(Usuario* usuarioAtual, Extrato* extrato);
+        printf("\n");
 
-int atualizarCotacao(void);
+        for (int i = 0; criptomoeda[i] != '\0'; ++i)
+                criptomoeda[i] = tolower(criptomoeda[i]); 
+
+        int comparacaoBitcoin = strcmp(criptomoeda, "bitcoin");
+        int comparacaoEthereum = strcmp(criptomoeda, "ethereum");
+        int comparacaoRipple = strcmp(criptomoeda, "ripple");
+
+        if (comparacaoBitcoin != 0 &&
+            comparacaoEthereum != 0 &&
+            comparacaoRipple != 0)
+        {
+                return 1;
+        }
+
+        printf("Digite quantos reais deseja gastar na compra da criptomoeda: ");
+        float valorDaCompra;
+        retorno = scanf("%f", &valorDaCompra);
+
+        if (valorDaCompra < 0.0f)
+                return 2;
+
+        if (valorDaCompra > usuarioAtual->saldoReais)
+                return 3;
+
+        Transacao transacao;
+
+        obterDataEHoraAtuais(transacao.data, transacao.hora);
+        transacao.tipo = '+';
+        transacao.valorDaTransacao = valorDaCompra;
+        transacao.saldoReais = usuarioAtual->saldoReais;
+        transacao.saldoBitcoin = usuarioAtual->saldoBitcoin;
+        transacao.saldoEthereum = usuarioAtual->saldoEthereum;
+        transacao.saldoRipple = usuarioAtual->saldoRipple;
+
+        char moedaDaTransacao[4];
+
+        if (comparacaoBitcoin == 0)
+        {
+                strcpy(moedaDaTransacao, "BTC");
+                usuarioAtual->saldoBitcoin += (valorDaCompra/cotacao->cotacaoBitcoin) * 0.98f;
+        }
+        else if (comparacaoEthereum == 0)
+        {
+                strcpy(moedaDaTransacao, "ETH");
+                usuarioAtual->saldoEthereum += (valorDaCompra/cotacao->cotacaoEthereum) * 0.99f;
+        }
+        else if (comparacaoRipple == 0)
+        {
+                strcpy(moedaDaTransacao, "XRP");
+                usuarioAtual->saldoRipple += (valorDaCompra/cotacao->cotacaoRipple) * 0.99f;
+        }
+
+        strcpy(transacao.moeda, moedaDaTransacao);
+
+        usuarioAtual->saldoReais -= valorDaCompra;
+
+        registrarTransacao(extrato, &transacao);
+
+        return 0;
+}
+
+int venderCriptomoeda(Usuario* usuarioAtual, Extrato* extrato, Cotacao* cotacao)
+{
+        printf("Digite qual criptomoeda deseja vender (Bitcoin, Ethereum ou Ripple): ");
+        char criptomoeda[9];
+        int retorno = scanf("%8s", criptomoeda);
+
+        printf("\n");
+
+        for (int i = 0; criptomoeda[i] != '\0'; ++i)
+                criptomoeda[i] = tolower(criptomoeda[i]); 
+
+        int comparacaoBitcoin = strcmp(criptomoeda, "bitcoin");
+        int comparacaoEthereum = strcmp(criptomoeda, "ethereum");
+        int comparacaoRipple = strcmp(criptomoeda, "ripple");
+
+        if (comparacaoBitcoin != 0 &&
+            comparacaoEthereum != 0 &&
+            comparacaoRipple != 0)
+        {
+                return 1;
+        }
+
+        printf("Digite quantas unidades da criptomoeda voce deseja vender: ");
+        float valorDaCompra;
+        retorno = scanf("%f", &valorDaCompra);
+
+        if (valorDaCompra < 0.0f)
+                return 2;
+
+        Transacao transacao;
+
+        obterDataEHoraAtuais(transacao.data, transacao.hora);
+        transacao.tipo = '-';
+        transacao.valorDaTransacao = valorDaCompra;
+        transacao.saldoReais = usuarioAtual->saldoReais;
+        transacao.saldoBitcoin = usuarioAtual->saldoBitcoin;
+        transacao.saldoEthereum = usuarioAtual->saldoEthereum;
+        transacao.saldoRipple = usuarioAtual->saldoRipple;
+
+        char moedaDaTransacao[4];
+
+        if (comparacaoBitcoin == 0)
+        {
+                if (valorDaCompra > usuarioAtual->saldoBitcoin)
+                        return 3;
+
+                strcpy(moedaDaTransacao, "BTC");
+                usuarioAtual->saldoBitcoin -= valorDaCompra;
+                usuarioAtual->saldoReais += (valorDaCompra * cotacao->cotacaoBitcoin) * 0.97f;
+        }
+        else if (comparacaoEthereum == 0)
+        {
+                if (valorDaCompra > usuarioAtual->saldoEthereum)
+                        return 3;
+
+                strcpy(moedaDaTransacao, "ETH");
+                usuarioAtual->saldoEthereum -= valorDaCompra;
+                usuarioAtual->saldoReais += (valorDaCompra * cotacao->cotacaoEthereum) * 0.98f;
+        }
+        else if (comparacaoRipple == 0)
+        {
+                if (valorDaCompra > usuarioAtual->saldoRipple)
+                        return 3;
+
+                strcpy(moedaDaTransacao, "XRP");
+                usuarioAtual->saldoRipple -= valorDaCompra;
+                usuarioAtual->saldoReais += (valorDaCompra * cotacao->cotacaoRipple) * 0.99f;
+        }
+
+        strcpy(transacao.moeda, moedaDaTransacao);
+
+        registrarTransacao(extrato, &transacao);
+
+        return 0;
+}
+
+int atualizarCotacao(Cotacao* cotacao);

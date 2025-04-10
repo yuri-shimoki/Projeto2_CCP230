@@ -177,7 +177,7 @@ void imprimirExtrato(Extrato* extrato)
         for (int i = extrato->quantidadeDeTransacoes - 1; i >= 0; --i)
         {
                 transacaoAtual = extrato->transacoes[i];
-                printf("%s %s %c %-13.6f %-8s R$%-9.2f %13.6fBTC %13.6fETH %13.6fXRP\n",
+                printf("%s %s %c %-13.6f %-8s R$%-9.2f %13.6f BTC %13.6f ETH %13.6f XRP\n",
                         transacaoAtual.data,
                         transacaoAtual.hora,
                         transacaoAtual.tipo,
@@ -200,4 +200,47 @@ void obterDataEHoraAtuais(char* data, char* hora)
 
         sprintf(data, "%02i-%02i-%04i", tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
         sprintf(hora, "%02i:%02i:%02i", tm.tm_hour, tm.tm_min, tm.tm_sec);
+}
+
+int abrirArquivo(FILE** arquivo, const char* nome)
+{
+        *arquivo = fopen(nome, "rb+");
+        if (*arquivo == NULL)
+        {
+                *arquivo = fopen(nome, "wb+");
+                if (*arquivo == NULL)
+                        return 1;
+
+                rewind(*arquivo);
+                return 0;
+        }
+
+        return 0;
+}
+
+int carregarCotacao(FILE* arquivoDeCotacao, Cotacao* cotacao)
+{
+        int elementosLidos = fread(cotacao, sizeof(Cotacao), 1, arquivoDeCotacao);
+
+        if (ferror(arquivoDeCotacao) != 0)
+                return 1;
+
+        if (elementosLidos == 0)
+        {
+                cotacao->cotacaoBitcoin = 668226.43f;
+                cotacao->cotacaoEthereum = 23468.95f;
+                cotacao->cotacaoRipple = 11.65f;
+        }
+
+        return 0;
+}
+
+int salvarCotacao(FILE* arquivoDeCotacao, Cotacao* cotacao)
+{
+        fwrite(cotacao, sizeof(Cotacao), 1, arquivoDeCotacao);
+
+        if (ferror(arquivoDeCotacao) != 0)
+                return 1;
+
+        return 0;
 }
