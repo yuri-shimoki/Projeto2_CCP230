@@ -18,6 +18,11 @@ typedef enum
         SAIR
 } Menus;
 
+typedef struct
+{
+        float cotacaoBitcoin, cotacaoEthereum, cotacaoRipple;
+} Cotacao;
+
 int login(ListaDeUsuarios* listaDeUsuarios, Usuario* usuarioAtual, int* indice);
 
 int exibirMenu(void);

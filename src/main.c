@@ -14,6 +14,7 @@ int main(void)
         Usuario usuarioAtual;
         int indiceDoUsuarioAtual;
         int codigoDeRetorno;
+        Cotacao cotacao;
 
         FILE* bancoDeDados = fopen("database.bin", "rb+");
         if (bancoDeDados == NULL)
@@ -151,11 +152,11 @@ int main(void)
                                 menuAtual = SALDO;
                                 break;
                         case 1:
-                                printf("O valor digitado e invalido.\n\n");
+                                printf("[ERRO]: O valor digitado e invalido.\n\n");
                                 menuAtual = MENU;
                                 break;
                         case 2:
-                                printf("O valor de deposito nao pode ser negativo.\n\n");
+                                printf("[ERRO]: O valor de deposito nao pode ser negativo.\n\n");
                                 menuAtual = MENU;
                                 break;
                         }
@@ -169,24 +170,46 @@ int main(void)
                                 menuAtual = SALDO;
                                 break;
                         case 1:
-                                printf("O valor digitado e invalido.\n\n");
+                                printf("[ERRO]: O valor digitado e invalido.\n\n");
                                 pressioneEnterParaContinuar();
                                 menuAtual = MENU;
                                 break;
                         case 2:
-                                printf("O valor de saque nao pode ser negativo.\n\n");
+                                printf("[ERRO]: O valor de saque nao pode ser negativo.\n\n");
                                 pressioneEnterParaContinuar();
                                 menuAtual = MENU;
                                 break;
                         case 3:
-                                printf("O valor de saque nao pode exceder seu saldo.\n\n");
+                                printf("[ERRO]: O valor de saque nao pode exceder seu saldo.\n\n");
                                 pressioneEnterParaContinuar();
                                 menuAtual = MENU;
                                 break;
                         }
                         break;
                 case COMPRA:
-                        menuAtual = MENU;
+                        codigoDeRetorno = comprarCriptomoeda(&usuarioAtual, extrato);
+
+                        switch (codigoDeRetorno)
+                        {
+                        case 0:
+                                menuAtual = SALDO;
+                                break;
+                        case 1:
+                                printf("[ERRO]: O valor digitado e invalido.\n\n");
+                                pressioneEnterParaContinuar();
+                                menuAtual = MENU;
+                                break;
+                        case 2:
+                                printf("[ERRO]: O valor de compra nao pode ser negativo.\n\n");
+                                pressioneEnterParaContinuar();
+                                menuAtual = MENU;
+                                break;
+                        case 3:
+                                printf("[ERRO]: O valor de compra nao pode exceder seu saldo.\n\n");
+                                pressioneEnterParaContinuar();
+                                menuAtual = MENU;
+                                break;
+                        }
                         break;
                 case VENDA:
                         menuAtual = MENU;
