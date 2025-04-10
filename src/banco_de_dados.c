@@ -220,6 +220,8 @@ int abrirArquivo(FILE** arquivo, const char* nome)
 
 int carregarCotacao(FILE* arquivoDeCotacao, Cotacao* cotacao)
 {
+        rewind(arquivoDeCotacao);
+
         int elementosLidos = fread(cotacao, sizeof(Cotacao), 1, arquivoDeCotacao);
 
         if (ferror(arquivoDeCotacao) != 0)
@@ -237,6 +239,8 @@ int carregarCotacao(FILE* arquivoDeCotacao, Cotacao* cotacao)
 
 int salvarCotacao(FILE* arquivoDeCotacao, Cotacao* cotacao)
 {
+        rewind(arquivoDeCotacao);
+
         fwrite(cotacao, sizeof(Cotacao), 1, arquivoDeCotacao);
 
         if (ferror(arquivoDeCotacao) != 0)
