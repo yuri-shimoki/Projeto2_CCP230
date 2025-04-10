@@ -222,6 +222,9 @@ int carregarCotacao(FILE* arquivoDeCotacao, Cotacao* cotacao)
 {
         int elementosLidos = fread(cotacao, sizeof(Cotacao), 1, arquivoDeCotacao);
 
+        if (ferror(arquivoDeCotacao) != 0)
+                return 1;
+
         if (elementosLidos == 0)
         {
                 cotacao->cotacaoBitcoin = 668226.43f;
@@ -232,4 +235,12 @@ int carregarCotacao(FILE* arquivoDeCotacao, Cotacao* cotacao)
         return 0;
 }
 
-int salvarCotacao(FILE* arquivoDeCotacao, Cotacao* cotacao);
+int salvarCotacao(FILE* arquivoDeCotacao, Cotacao* cotacao)
+{
+        fwrite(cotacao, sizeof(Cotacao), 1, arquivoDeCotacao);
+
+        if (ferror(arquivoDeCotacao) != 0)
+                return 1;
+
+        return 0;
+}
