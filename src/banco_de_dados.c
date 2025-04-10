@@ -177,7 +177,7 @@ void imprimirExtrato(Extrato* extrato)
         for (int i = extrato->quantidadeDeTransacoes - 1; i >= 0; --i)
         {
                 transacaoAtual = extrato->transacoes[i];
-                printf("%s %s %c %-13.6f %-8s R$%-9.2f %13.6fBTC %13.6fETH %13.6fXRP\n",
+                printf("%s %s %c %-13.6f %-8s R$%-9.2f %13.6f BTC %13.6f ETH %13.6f XRP\n",
                         transacaoAtual.data,
                         transacaoAtual.hora,
                         transacaoAtual.tipo,

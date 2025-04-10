@@ -183,7 +183,7 @@ int main(void)
                         }
                         break;
                 case COMPRA:
-                        codigoDeRetorno = comprarCriptomoeda(&usuarioAtual, extrato);
+                        codigoDeRetorno = comprarCriptomoeda(&usuarioAtual, extrato, &cotacao);
 
                         switch (codigoDeRetorno)
                         {
@@ -191,24 +191,46 @@ int main(void)
                                 menuAtual = SALDO;
                                 break;
                         case 1:
-                                printf("[ERRO]: O valor digitado e invalido.\n\n");
+                                printf("[ERRO]: O valor digitado nao e uma criptomoeda valida. Escolha entre Bitcoin, Ethereum ou Ripple.\n\n");
                                 pressioneEnterParaContinuar();
                                 menuAtual = MENU;
                                 break;
                         case 2:
-                                printf("[ERRO]: O valor de compra nao pode ser negativo.\n\n");
+                                printf("[ERRO]: O valor da compra nao pode ser negativo.\n\n");
                                 pressioneEnterParaContinuar();
                                 menuAtual = MENU;
                                 break;
                         case 3:
-                                printf("[ERRO]: O valor de compra nao pode exceder seu saldo.\n\n");
+                                printf("[ERRO]: O valor da compra nao pode exceder seu saldo.\n\n");
                                 pressioneEnterParaContinuar();
                                 menuAtual = MENU;
                                 break;
                         }
                         break;
                 case VENDA:
-                        menuAtual = MENU;
+                        codigoDeRetorno = venderCriptomoeda(&usuarioAtual, extrato, &cotacao);
+
+                        switch (codigoDeRetorno)
+                        {
+                        case 0:
+                                menuAtual = SALDO;
+                                break;
+                        case 1:
+                                printf("[ERRO]: O valor digitado nao e uma criptomoeda valida. Escolha entre Bitcoin, Ethereum ou Ripple.\n\n");
+                                pressioneEnterParaContinuar();
+                                menuAtual = MENU;
+                                break;
+                        case 2:
+                                printf("[ERRO]: O valor da compra nao pode ser negativo.\n\n");
+                                pressioneEnterParaContinuar();
+                                menuAtual = MENU;
+                                break;
+                        case 3:
+                                printf("[ERRO]: O valor da compra nao pode exceder seu saldo.\n\n");
+                                pressioneEnterParaContinuar();
+                                menuAtual = MENU;
+                                break;
+                        }
                         break;
 
                 case COTACAO:
