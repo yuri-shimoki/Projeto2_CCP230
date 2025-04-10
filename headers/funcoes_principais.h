@@ -18,7 +18,7 @@ typedef enum
         SAIR
 } Menus;
 
-int login(ListaDeUsuarios* listaDeUsuarios, Usuario* usuarioAtual);
+int login(ListaDeUsuarios* listaDeUsuarios, Usuario* usuarioAtual, int* indice);
 
 int exibirMenu(void);
 
@@ -28,10 +28,10 @@ int exibirExtrato(void);
 
 int depositarDinheiro(Usuario* usuarioAtual, Extrato* extrato);
 
-int sacarDinheiro(void);
+int sacarDinheiro(Usuario* usuarioAtual, Extrato* extrato);
 
-int comprarCriptomoeda(void);
+int comprarCriptomoeda(Usuario* usuarioAtual, Extrato* extrato);
 
-int venderCriptomoeda(void);
+int venderCriptomoeda(Usuario* usuarioAtual, Extrato* extrato);
 
 int atualizarCotacao(void);

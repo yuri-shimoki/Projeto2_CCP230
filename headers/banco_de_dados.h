@@ -10,8 +10,8 @@ typedef struct
 
 typedef struct
 {
-        Usuario usuarios[10];
         unsigned int quantidadeDeUsuarios;
+        Usuario usuarios[10];
 } ListaDeUsuarios;
 
 typedef struct
@@ -28,7 +28,7 @@ typedef struct
 } Extrato;
 
 int carregarListaDeUsuarios(FILE* bancoDeDados, ListaDeUsuarios* listaDeUsuarios);
-int salvarListaDeUsuarios(FILE* bancoDeDados, ListaDeUsuarios* ListaDeUsuarios);
+int salvarUsuario(FILE* bancoDeDados, Usuario* usuarioAtual, int indiceDoUsuarioAtual, int quantidadeDeUsuarios);
 
 int carregarExtrato(FILE* arquivoDeExtratos, char* cpf, Extrato* extrato);
 int salvarExtrato(FILE* arquivoDeExtratos, Extrato* extrato, int usuarioPossuiExtrato);

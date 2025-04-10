@@ -19,13 +19,18 @@ int checarExistenciaDoUsuario(ListaDeUsuarios* listaDeUsuarios, char* cpf, char*
 
 int carregarListaDeUsuarios(FILE* bancoDeDados, ListaDeUsuarios* listaDeUsuarios)
 {
-        int elementosLidos = fread(listaDeUsuarios, sizeof(ListaDeUsuarios), 1, bancoDeDados);
+        int elementosLidos = fread(listaDeUsuarios, 1, sizeof(ListaDeUsuarios), bancoDeDados);
 
         if (ferror(bancoDeDados) != 0)
                 return 2;
 
-        if (elementosLidos == 0 && feof(bancoDeDados) != 0)
+        if (listaDeUsuarios->quantidadeDeUsuarios == 0)
+        {
+                Usuario usuarioPadrao = { "00000000000", "00000000", "Usuario Temporario", 0.0f, 0.0f, 0.0f, 0.0f };
+                listaDeUsuarios->usuarios[0] = usuarioPadrao;
+                listaDeUsuarios->quantidadeDeUsuarios = 1;
                 return 3;
+        }
 
         if (listaDeUsuarios->quantidadeDeUsuarios > 10)
                 return 4;
@@ -111,6 +116,7 @@ int salvarExtrato(FILE* arquivoDeExtratos, Extrato* extrato, int usuarioPossuiEx
                         }
 
                         free(extratoTemporario);
+
                         return 0;
                 }
 
@@ -124,11 +130,15 @@ int salvarExtrato(FILE* arquivoDeExtratos, Extrato* extrato, int usuarioPossuiEx
         return 4;
 }
 
-int salvarListaDeUsuarios(FILE* bancoDeDados, ListaDeUsuarios* listaDeUsuarios)
+int salvarUsuario(FILE* bancoDeDados, Usuario* usuarioAtual, int indiceDoUsuarioAtual, int quantidadeDeUsuarios)
 {
         rewind(bancoDeDados);
 
-        fwrite(listaDeUsuarios, sizeof(ListaDeUsuarios), 1, bancoDeDados);
+        fwrite(&quantidadeDeUsuarios, sizeof(int), 1, bancoDeDados);
+
+        fseek(bancoDeDados, indiceDoUsuarioAtual * sizeof(Usuario), SEEK_CUR);
+
+        fwrite(usuarioAtual, sizeof(Usuario), 1, bancoDeDados);
 
         if (ferror(bancoDeDados) != 0)
                 return 1;
