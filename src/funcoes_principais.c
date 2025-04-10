@@ -94,6 +94,11 @@ int depositarDinheiro(Usuario* usuarioAtual, Extrato* extrato)
 
 int sacarDinheiro(Usuario* usuarioAtual, Extrato* extrato)
 {
+        int codigoDeRetorno = requisitarEVerificarSenha(usuarioAtual);
+
+        if (codigoDeRetorno == 1)
+                return 4;
+
         printf("Digite quantos reais deseja sacar: R$");
         float valor;
         int retorno = scanf("%f", &valor);
@@ -129,9 +134,14 @@ int sacarDinheiro(Usuario* usuarioAtual, Extrato* extrato)
 
 int comprarCriptomoeda(Usuario* usuarioAtual, Extrato* extrato, Cotacao* cotacao)
 {
+        int codigoDeRetorno = requisitarEVerificarSenha(usuarioAtual);
+
+        if (codigoDeRetorno == 1)
+                return 4;
+
         printf("Digite qual criptomoeda deseja comprar (Bitcoin, Ethereum ou Ripple): ");
         char criptomoeda[9];
-        int retorno = scanf("%8s", criptomoeda);
+        int retorno = scanf(" %8s", criptomoeda);
 
         printf("\n");
 
@@ -169,27 +179,58 @@ int comprarCriptomoeda(Usuario* usuarioAtual, Extrato* extrato, Cotacao* cotacao
         transacao.saldoEthereum = usuarioAtual->saldoEthereum;
         transacao.saldoRipple = usuarioAtual->saldoRipple;
 
-        char moedaDaTransacao[4];
+        float *saldoCriptomoeda, valorDaCotacao, taxa;
+        char moedaDaTransacaoSigla[4], moedaDaTransacao[9];
 
         if (comparacaoBitcoin == 0)
         {
-                strcpy(moedaDaTransacao, "BTC");
-                usuarioAtual->saldoBitcoin += (valorDaCompra/cotacao->cotacaoBitcoin) * 0.98f;
+                strcpy(moedaDaTransacaoSigla, "BTC");
+                strcpy(moedaDaTransacao, "Bitcoin");
+                saldoCriptomoeda = &usuarioAtual->saldoBitcoin;
+                valorDaCotacao = cotacao->cotacaoBitcoin;
+                taxa = 0.98f;
         }
         else if (comparacaoEthereum == 0)
         {
-                strcpy(moedaDaTransacao, "ETH");
-                usuarioAtual->saldoEthereum += (valorDaCompra/cotacao->cotacaoEthereum) * 0.99f;
+                strcpy(moedaDaTransacaoSigla, "ETH");
+                strcpy(moedaDaTransacao, "Ethereum");
+                saldoCriptomoeda = &usuarioAtual->saldoEthereum;
+                valorDaCotacao = cotacao->cotacaoEthereum;
+                taxa = 0.99f;
         }
         else if (comparacaoRipple == 0)
         {
-                strcpy(moedaDaTransacao, "XRP");
-                usuarioAtual->saldoRipple += (valorDaCompra/cotacao->cotacaoRipple) * 0.99f;
+                strcpy(moedaDaTransacaoSigla, "XRP");
+                strcpy(moedaDaTransacao, "Ripple");
+                saldoCriptomoeda = &usuarioAtual->saldoRipple;
+                valorDaCotacao = cotacao->cotacaoRipple;
+                taxa = 0.99f;
         }
 
-        strcpy(transacao.moeda, moedaDaTransacao);
+        strcpy(transacao.moeda, moedaDaTransacaoSigla);
+
+        float valorRecebido = (valorDaCompra/valorDaCotacao) * taxa;
+
+        printf("Detalhes da compra:\n- Criptomoeda a ser comprada: %s\n- Valor que sera deduzido do seu saldo: R$%.2f\n- Taxa da compra: %.2f\n- Valor que sera recebido: %.6f %s\n\nTem certeza que deseja continuar?\nDigite 'confirmar' para continuar, digite qualquer outra coisa para cancelar.\n",
+                moedaDaTransacao,
+                valorDaCompra,
+                taxa,
+                valorRecebido,
+                moedaDaTransacaoSigla);
+
+        char entrada[10];
+        scanf(" %9s", entrada);
+
+        for (int i = 0; entrada[i] != '\0'; ++i)
+                entrada[i] = tolower(entrada[i]);
+
+        if (strcmp(entrada, "confirmar") != 0)
+                return 5;
+
+        printf("\n");
 
         usuarioAtual->saldoReais -= valorDaCompra;
+        *saldoCriptomoeda += valorRecebido;
 
         registrarTransacao(extrato, &transacao);
 
@@ -198,9 +239,14 @@ int comprarCriptomoeda(Usuario* usuarioAtual, Extrato* extrato, Cotacao* cotacao
 
 int venderCriptomoeda(Usuario* usuarioAtual, Extrato* extrato, Cotacao* cotacao)
 {
+        int codigoDeRetorno = requisitarEVerificarSenha(usuarioAtual);
+
+        if (codigoDeRetorno == 1)
+                return 4;
+
         printf("Digite qual criptomoeda deseja vender (Bitcoin, Ethereum ou Ripple): ");
         char criptomoeda[9];
-        int retorno = scanf("%8s", criptomoeda);
+        int retorno = scanf(" %8s", criptomoeda);
 
         printf("\n");
 
@@ -235,37 +281,58 @@ int venderCriptomoeda(Usuario* usuarioAtual, Extrato* extrato, Cotacao* cotacao)
         transacao.saldoEthereum = usuarioAtual->saldoEthereum;
         transacao.saldoRipple = usuarioAtual->saldoRipple;
 
-        char moedaDaTransacao[4];
+        float *saldoCriptomoeda, valorDaCotacao, taxa;
+        char moedaDaTransacaoSigla[4], moedaDaTransacao[9];
 
         if (comparacaoBitcoin == 0)
         {
-                if (valorDaCompra > usuarioAtual->saldoBitcoin)
-                        return 3;
-
-                strcpy(moedaDaTransacao, "BTC");
-                usuarioAtual->saldoBitcoin -= valorDaCompra;
-                usuarioAtual->saldoReais += (valorDaCompra * cotacao->cotacaoBitcoin) * 0.97f;
+                strcpy(moedaDaTransacaoSigla, "BTC");
+                strcpy(moedaDaTransacao, "Bitcoin");
+                saldoCriptomoeda = &usuarioAtual->saldoBitcoin;
+                valorDaCotacao = cotacao->cotacaoBitcoin;
+                taxa = 0.97f;
         }
         else if (comparacaoEthereum == 0)
         {
-                if (valorDaCompra > usuarioAtual->saldoEthereum)
-                        return 3;
-
-                strcpy(moedaDaTransacao, "ETH");
-                usuarioAtual->saldoEthereum -= valorDaCompra;
-                usuarioAtual->saldoReais += (valorDaCompra * cotacao->cotacaoEthereum) * 0.98f;
+                strcpy(moedaDaTransacaoSigla, "ETH");
+                strcpy(moedaDaTransacao, "Ethereum");
+                saldoCriptomoeda = &usuarioAtual->saldoEthereum;
+                valorDaCotacao = cotacao->cotacaoEthereum;
+                taxa = 0.98f;
         }
         else if (comparacaoRipple == 0)
         {
-                if (valorDaCompra > usuarioAtual->saldoRipple)
-                        return 3;
-
-                strcpy(moedaDaTransacao, "XRP");
-                usuarioAtual->saldoRipple -= valorDaCompra;
-                usuarioAtual->saldoReais += (valorDaCompra * cotacao->cotacaoRipple) * 0.99f;
+                strcpy(moedaDaTransacaoSigla, "XRP");
+                strcpy(moedaDaTransacao, "Ripple");
+                saldoCriptomoeda = &usuarioAtual->saldoRipple;
+                valorDaCotacao = cotacao->cotacaoRipple;
+                taxa = 0.99f;
         }
 
-        strcpy(transacao.moeda, moedaDaTransacao);
+        strcpy(transacao.moeda, moedaDaTransacaoSigla);
+
+        float valorRecebido = (valorDaCompra * valorDaCotacao) * taxa;
+
+        printf("Detalhes da compra:\n- Criptomoeda a ser vendida: %s\n- Valor que sera deduzido do seu saldo: %.2f %s\n- Taxa da venda: %.2f\n- Valor que sera recebido: R$%.6f\n\nTem certeza que deseja continuar?\nDigite 'confirmar' para continuar, digite qualquer outra coisa para cancelar.\n",
+                moedaDaTransacao,
+                valorDaCompra,
+                moedaDaTransacaoSigla,
+                taxa,
+                valorRecebido);
+
+        char entrada[10];
+        scanf(" %9s", entrada);
+
+        for (int i = 0; entrada[i] != '\0'; ++i)
+                entrada[i] = tolower(entrada[i]);
+
+        if (strcmp(entrada, "confirmar") != 0)
+                return 5;
+
+        printf("\n");
+
+        usuarioAtual->saldoReais += valorRecebido;
+        *saldoCriptomoeda -= valorDaCompra;
 
         registrarTransacao(extrato, &transacao);
 
