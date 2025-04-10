@@ -7,8 +7,6 @@
 
 int checarExistenciaDoUsuario(ListaDeUsuarios* listaDeUsuarios, char* cpf, char* senha)
 {
-        printf("cpf: %s\n\n", listaDeUsuarios->usuarios[0].cpf);
-
         for (int i = 0; i < 10; ++i)
         {
                 if (strcmp(listaDeUsuarios->usuarios[i].cpf, cpf) == 0 &&
@@ -21,11 +19,6 @@ int checarExistenciaDoUsuario(ListaDeUsuarios* listaDeUsuarios, char* cpf, char*
 
 int carregarListaDeUsuarios(FILE* bancoDeDados, ListaDeUsuarios* listaDeUsuarios)
 {
-        listaDeUsuarios = (ListaDeUsuarios*) malloc(sizeof(ListaDeUsuarios));
-
-        if (listaDeUsuarios == NULL)
-                return 1;
-
         int elementosLidos = fread(listaDeUsuarios, sizeof(ListaDeUsuarios), 1, bancoDeDados);
 
         if (ferror(bancoDeDados) != 0)
@@ -36,15 +29,13 @@ int carregarListaDeUsuarios(FILE* bancoDeDados, ListaDeUsuarios* listaDeUsuarios
 
         if (listaDeUsuarios->quantidadeDeUsuarios > 10)
                 return 4;
-
+                
         return 0;
 }
 
 int carregarExtrato(FILE* arquivoDeExtratos, char* cpf, Extrato* extrato)
 {
         Extrato* extratos = (Extrato*) malloc(10 * sizeof(Extrato));
-
-        extrato = (Extrato*) malloc(sizeof(Extrato));
 
         if (extrato == NULL || extratos == NULL)
                 return 1;
@@ -175,6 +166,8 @@ int imprimirExtrato(Extrato* extrato)
                 printf("O usuario ainda nao realizou uma transacao.\n");
                 return 0;
         }
+
+        printf("%u\n", extrato->quantidadeDeTransacoes);
 
         for (int i = extrato->quantidadeDeTransacoes - 1; i >= 0; --i)
         {
