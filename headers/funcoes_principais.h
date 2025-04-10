@@ -26,7 +26,7 @@ void exibirSaldo(Usuario* usuarioAtual);
 
 int exibirExtrato(void);
 
-int depositarDinheiro(void);
+int depositarDinheiro(Usuario* usuarioAtual, Extrato* extrato);
 
 int sacarDinheiro(void);
 

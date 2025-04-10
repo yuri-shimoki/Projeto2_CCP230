@@ -20,7 +20,8 @@ int main(void)
                 bancoDeDados = fopen("database.bin", "wb+");
                 if (bancoDeDados == NULL)
                 {
-                        printf("[ERRO]: Nao foi possivel criar um banco de dados. Terminando o programa.");
+                        printf("[ERRO]: Nao foi possivel criar um banco de dados.\n");
+                        pressioneEnterParaContinuar();
                         return 1;
                 }
 
@@ -33,7 +34,8 @@ int main(void)
                 arquivoDeExtratos = fopen("extratos.bin", "wb+");
                 if (arquivoDeExtratos == NULL)
                 {
-                        printf("[ERRO]: Nao foi possivel criar um arquivo de extratos. Terminando o programa.\n\n");
+                        printf("[ERRO]: Nao foi possivel criar um arquivo de extratos.\n\n");
+                        pressioneEnterParaContinuar();
                         return 1;
                 }
 
@@ -46,7 +48,7 @@ int main(void)
         
         codigoDeRetorno = carregarListaDeUsuarios(bancoDeDados, listaDeUsuarios);
 
-        Usuario usuarioPadrao = { "00000000000\0", "00000000\0", "Usuario Temporario\0", 0.0f, 0.0f, 0.0f, 0.0f };
+        Usuario usuarioPadrao = { "00000000000", "00000000", "Usuario Temporario", 0.0f, 0.0f, 0.0f, 0.0f };
         listaDeUsuarios->usuarios[0] = usuarioPadrao;
         ++(listaDeUsuarios->quantidadeDeUsuarios);
 
@@ -54,15 +56,18 @@ int main(void)
         {
         case 1:
                 printf("[ERRO]: Nao foi possivel alocar espaco na memoria.\n\n");
+                pressioneEnterParaContinuar();
                 return 2;
         case 2:
                 printf("[ERRO]: Nao foi possivel ler o banco de dados.\n\n");
+                pressioneEnterParaContinuar();
                 return 3;
         case 3:
                 printf("--- [AVISO] ---\nO banco de dados esta vazio. No entanto, o programa ira criar um usuario padrao para fins de teste.\nRemova esta funcionalidade quando for possivel registrar novos usuarios.\n\n");
                 break;
         case 4:
                 printf("[ERRO]: O banco de dados possui mais que 10 usuarios.\n\n");
+                pressioneEnterParaContinuar();
                 return 4;
         }
 
@@ -83,9 +88,11 @@ int main(void)
                                 {
                                 case 1:
                                         printf("[ERRO]: Nao foi possivel alocar espaco na memoria.\n\n");
+                                        pressioneEnterParaContinuar();
                                         break;
                                 case 2:
                                         printf("[ERRO]: Nao foi possivel abrir ou criar o arquivo de extratos.\n\n");
+                                        pressioneEnterParaContinuar();
                                         break;
                                 case 3:
                                         usuarioPossuiExtrato = 0;
@@ -96,12 +103,15 @@ int main(void)
                                 break;
                         case 1:
                                 printf("[ERRO]: A entrada digitada nao e um CPF valido.\n\n");
+                                pressioneEnterParaContinuar();
                                 break;
                         case 2:
                                 printf("[ERRO]: A entrada digitada nao e uma senha valida.\n\n");
+                                pressioneEnterParaContinuar();
                                 break;
                         case 3:
                                 printf("[ERRO]: O CPF e senha digitados nao correspondem a um usuario existente.\n\n");
+                                pressioneEnterParaContinuar();
                                 break;
                         }
 
@@ -111,9 +121,8 @@ int main(void)
 
                         if (codigoDeRetorno == 9)
                         {
-                                printf("[ERRO]: O numero digitado nao e um numero de 1 a 8. Pressione ENTER para continuar.\n\n");
-                                char c;
-                                scanf("%*c%c", &c);
+                                printf("[ERRO]: O numero digitado nao e um numero de 1 a 8.\n\n");
+                                pressioneEnterParaContinuar();
                         }
                         printf("\n");
 
@@ -130,11 +139,40 @@ int main(void)
                         menuAtual = MENU;
                         break;
                 case DEPOSITO:
+                        codigoDeRetorno = depositarDinheiro(&usuarioAtual, extrato);
 
-                        menuAtual = MENU;
+                        switch (codigoDeRetorno)
+                        {
+                        case 0:
+                                menuAtual = SALDO;
+                                break;
+                        case 1:
+                                printf("O valor digitado e invalido.\n\n");
+                                menuAtual = MENU;
+                                break;
+                        case 2:
+                                printf("O valor de deposito nao pode ser negativo.\n\n");
+                                menuAtual = MENU;
+                                break;
+                        }
                         break;
                 case SAQUE:
-                        menuAtual = MENU;
+                        // codigoDeRetorno = depositarDinheiro(&usuarioAtual, extrato);
+
+                        // switch (codigoDeRetorno)
+                        // {
+                        // case 0:
+                        //         menuAtual = SALDO;
+                        //         break;
+                        // case 1:
+                        //         printf("O valor digitado e invalido.\n\n");
+                        //         menuAtual = MENU;
+                        //         break;
+                        // case 2:
+                        //         printf("O valor de deposito nao pode ser negativo.\n\n");
+                        //         menuAtual = MENU;
+                        //         break;
+                        // }
                         break;
                 case COMPRA:
                         menuAtual = MENU;

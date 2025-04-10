@@ -48,3 +48,35 @@ void exibirSaldo(Usuario* usuarioAtual)
 {
         printf("Saldo:\nR$%.2f\n%.6f BTC\n%.6f ETH\n%.6f XRP\n\n", usuarioAtual->saldoReais, usuarioAtual->saldoBitcoin, usuarioAtual->saldoEthereum, usuarioAtual->saldoRipple);
 }
+
+int depositarDinheiro(Usuario* usuarioAtual, Extrato* extrato)
+{
+        printf("Digite quantos reais deseja depositar: R$");
+        float valor;
+        int retorno = scanf("%f", &valor);
+
+        printf("\n");
+
+        if (retorno != 1)
+                return 1;
+
+        if (valor < 0)
+                return 2;
+
+        Transacao transacao;
+
+        obterDataEHoraAtuais(transacao.data, transacao.hora);
+        transacao.tipo = '+';
+        transacao.valorDaTransacao = valor;
+        strcpy(transacao.moeda, "REAL");
+        transacao.saldoReais = usuarioAtual->saldoReais;
+        transacao.saldoBitcoin = usuarioAtual->saldoBitcoin;
+        transacao.saldoEthereum = usuarioAtual->saldoEthereum;
+        transacao.saldoRipple = usuarioAtual->saldoRipple;
+
+        usuarioAtual->saldoReais += valor;
+
+        registrarTransacao(extrato, &transacao);
+
+        return 0;
+}

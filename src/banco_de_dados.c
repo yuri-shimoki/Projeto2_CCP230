@@ -157,22 +157,17 @@ int registrarTransacao(Extrato* extrato, Transacao* transacao)
         return 0;
 }
 
-int imprimirExtrato(Extrato* extrato)
+void imprimirExtrato(Extrato* extrato)
 {
         Transacao transacaoAtual;
 
         if (extrato->quantidadeDeTransacoes == 0)
-        {
                 printf("O usuario ainda nao realizou uma transacao.\n");
-                return 0;
-        }
-
-        printf("%u\n", extrato->quantidadeDeTransacoes);
 
         for (int i = extrato->quantidadeDeTransacoes - 1; i >= 0; --i)
         {
                 transacaoAtual = extrato->transacoes[i];
-                printf("%s %s %c %-13.6f %-8s R$%9.2f %13.6fBTC %13.6fETH %13.6fXRP\n",
+                printf("%s %s %c %-13.6f %-8s R$%-9.2f %13.6fBTC %13.6fETH %13.6fXRP\n",
                         transacaoAtual.data,
                         transacaoAtual.hora,
                         transacaoAtual.tipo,
@@ -186,8 +181,6 @@ int imprimirExtrato(Extrato* extrato)
         }
 
         printf("\n");
-
-        return 0;
 }
 
 void obterDataEHoraAtuais(char* data, char* hora)
@@ -195,6 +188,6 @@ void obterDataEHoraAtuais(char* data, char* hora)
         time_t t = time(NULL);
         struct tm tm = *localtime(&t);
 
-        sprintf(data, "%02i-%02i-%04i", tm.tm_mday, tm.tm_mon, tm.tm_year);
+        sprintf(data, "%02i-%02i-%04i", tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
         sprintf(hora, "%02i:%02i:%02i", tm.tm_hour, tm.tm_min, tm.tm_sec);
 }
