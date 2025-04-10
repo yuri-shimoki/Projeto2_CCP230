@@ -182,6 +182,11 @@ int main(void)
                                 pressioneEnterParaContinuar();
                                 menuAtual = MENU;
                                 break;
+                        case 4: 
+                                printf("[ERRO]: A senha digitada esta incorreta.\n\n");
+                                pressioneEnterParaContinuar();
+                                menuAtual = MENU;
+                                break;
                         }
                         break;
                 case COMPRA:
@@ -207,6 +212,16 @@ int main(void)
                                 pressioneEnterParaContinuar();
                                 menuAtual = MENU;
                                 break;
+                        case 4: 
+                                printf("[ERRO]: A senha digitada esta incorreta.\n\n");
+                                pressioneEnterParaContinuar();
+                                menuAtual = MENU;
+                                break;
+                        case 5:
+                                printf("A transacao foi cancelada.\n\n");
+                                pressioneEnterParaContinuar();
+                                menuAtual = MENU;
+                                break;
                         }
                         break;
                 case VENDA:
@@ -229,6 +244,16 @@ int main(void)
                                 break;
                         case 3:
                                 printf("[ERRO]: O valor da compra nao pode exceder seu saldo.\n\n");
+                                pressioneEnterParaContinuar();
+                                menuAtual = MENU;
+                                break;
+                        case 4: 
+                                printf("[ERRO]: A senha digitada esta incorreta.\n\n");
+                                pressioneEnterParaContinuar();
+                                menuAtual = MENU;
+                                break;
+                        case 5:
+                                printf("A transacao foi cancelada.\n\n");
                                 pressioneEnterParaContinuar();
                                 menuAtual = MENU;
                                 break;
