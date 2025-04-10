@@ -40,8 +40,8 @@ int main(void)
                 rewind(arquivoDeExtratos);
         }
 
-        ListaDeUsuarios* listaDeUsuarios;
-        Extrato* extrato;
+        ListaDeUsuarios* listaDeUsuarios = (ListaDeUsuarios*) malloc(sizeof(ListaDeUsuarios));
+        Extrato* extrato = (Extrato*) malloc(sizeof(Extrato));
         int usuarioPossuiExtrato = 1;
         
         codigoDeRetorno = carregarListaDeUsuarios(bancoDeDados, listaDeUsuarios);
@@ -77,8 +77,8 @@ int main(void)
                         case 0:
                                 printf("Bem-vindo, %s.\n\n", usuarioAtual.nome);
 
-                                codigoDeRetorno = carregarExtrato(arquivoDeExtratos, usuarioAtual.cpf, extrato);
-
+                                codigoDeRetorno = carregarExtrato(arquivoDeExtratos, usuarioAtual.cpf, extrato); 
+                                //extrato->quantidadeDeTransacoes = 0;
                                 switch (codigoDeRetorno)
                                 {
                                 case 1:
