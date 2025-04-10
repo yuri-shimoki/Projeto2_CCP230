@@ -46,6 +46,6 @@ int salvarCotacao(FILE* arquivoDeCotacao, Cotacao* cotacao);
 
 int checarExistenciaDoUsuario(ListaDeUsuarios* listaDeUsuarios, char* cpf, char* senha);
 
-int abrirArquivo(const char* nome, const char* modo);
+int abrirArquivo(FILE** arquivo, const char* nome);
 
 void obterDataEHoraAtuais(char* data, char* hora);

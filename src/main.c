@@ -20,7 +20,7 @@ int main(void)
         codigoDeRetorno = abrirArquivo(&bancoDeDados, "database.bin");
 
         FILE* arquivoDeExtratos;
-        codigoDeRetorno = abrirArquivo(&arquivoDeExtratos, "extrato.bin");
+        codigoDeRetorno = abrirArquivo(&arquivoDeExtratos, "extratos.bin");
 
         FILE* arquivoDeCotacao;
         codigoDeRetorno = abrirArquivo(&arquivoDeCotacao, "cotacao.bin");
@@ -48,7 +48,7 @@ int main(void)
                 return 2;
                 break;
         case 2:
-                printf("[ERRO]: Nao foi possivel ler o banco de dados.\n\n");
+                printf("[ERRO]: Nao foi possivel ler o banco de dados.\nTerminando o programa.\n\n");
                 pressioneEnterParaContinuar();
                 return 3;
                 break;
@@ -56,13 +56,20 @@ int main(void)
                 printf("--- [AVISO] ---\nO banco de dados esta vazio. No entanto, o programa ira criar um usuario padrao para fins de teste.\nRemova esta funcionalidade quando for possivel registrar novos usuarios.\n\n");
                 break;
         case 4:
-                printf("[ERRO]: O banco de dados possui mais que 10 usuarios.\n\n");
+                printf("[ERRO]: O banco de dados possui mais que 10 usuarios.\nTerminando o programa.\n\n");
                 pressioneEnterParaContinuar();
                 return 4;
                 break;
         }
 
-        carregarCotacao(arquivoDeCotacao, &cotacao);
+        codigoDeRetorno = carregarCotacao(arquivoDeCotacao, &cotacao);
+
+        if (codigoDeRetorno == 1)
+        {
+                printf("[ERRO]: Nao foi possivel ler o arquivo de cotacao.\nTerminando o programa\n\n");
+                pressioneEnterParaContinuar();
+                return 5;
+        }
 
         do
         {
@@ -235,9 +242,15 @@ int main(void)
         if (codigoDeRetorno == 1)
                 printf("[ERRO]: Nao foi possivel salvar o banco de dados.\n\n");
 
+        codigoDeRetorno = salvarCotacao(arquivoDeCotacao, &cotacao);
+
+        if (codigoDeRetorno == 1)
+                printf("[ERRO]: Nao foi possivel salvar a cotacao.\n\n");
+
         free(extrato);
         free(listaDeUsuarios);
 
+        fclose(arquivoDeCotacao);
         fclose(arquivoDeExtratos);
         fclose(bancoDeDados);
 
