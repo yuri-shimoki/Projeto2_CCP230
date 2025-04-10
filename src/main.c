@@ -12,6 +12,7 @@ int main(void)
 
         Menus menuAtual = LOGIN;
         Usuario usuarioAtual;
+        int indiceDoUsuarioAtual;
         int codigoDeRetorno;
 
         FILE* bancoDeDados = fopen("database.bin", "rb+");
@@ -43,14 +44,13 @@ int main(void)
         }
 
         ListaDeUsuarios* listaDeUsuarios = (ListaDeUsuarios*) malloc(sizeof(ListaDeUsuarios));
+
+        listaDeUsuarios->quantidadeDeUsuarios = 0;
+
         Extrato* extrato = (Extrato*) malloc(sizeof(Extrato));
         int usuarioPossuiExtrato = 1;
         
         codigoDeRetorno = carregarListaDeUsuarios(bancoDeDados, listaDeUsuarios);
-
-        Usuario usuarioPadrao = { "00000000000", "00000000", "Usuario Temporario", 0.0f, 0.0f, 0.0f, 0.0f };
-        listaDeUsuarios->usuarios[0] = usuarioPadrao;
-        ++(listaDeUsuarios->quantidadeDeUsuarios);
 
         switch (codigoDeRetorno)
         {
@@ -58,10 +58,12 @@ int main(void)
                 printf("[ERRO]: Nao foi possivel alocar espaco na memoria.\n\n");
                 pressioneEnterParaContinuar();
                 return 2;
+                break;
         case 2:
                 printf("[ERRO]: Nao foi possivel ler o banco de dados.\n\n");
                 pressioneEnterParaContinuar();
                 return 3;
+                break;
         case 3:
                 printf("--- [AVISO] ---\nO banco de dados esta vazio. No entanto, o programa ira criar um usuario padrao para fins de teste.\nRemova esta funcionalidade quando for possivel registrar novos usuarios.\n\n");
                 break;
@@ -69,6 +71,7 @@ int main(void)
                 printf("[ERRO]: O banco de dados possui mais que 10 usuarios.\n\n");
                 pressioneEnterParaContinuar();
                 return 4;
+                break;
         }
 
         do
@@ -76,7 +79,7 @@ int main(void)
                 switch (menuAtual)
                 {
                 case LOGIN:
-                        codigoDeRetorno = login(listaDeUsuarios, &usuarioAtual);
+                        codigoDeRetorno = login(listaDeUsuarios, &usuarioAtual, &indiceDoUsuarioAtual);
                         switch (codigoDeRetorno)
                         {
                         case 0:
@@ -123,8 +126,9 @@ int main(void)
                         {
                                 printf("[ERRO]: O numero digitado nao e um numero de 1 a 8.\n\n");
                                 pressioneEnterParaContinuar();
+                                printf("\n");
+                                menuAtual = MENU;
                         }
-                        printf("\n");
 
                         menuAtual = codigoDeRetorno + 1;
                         break;
@@ -157,22 +161,29 @@ int main(void)
                         }
                         break;
                 case SAQUE:
-                        // codigoDeRetorno = depositarDinheiro(&usuarioAtual, extrato);
+                        codigoDeRetorno = sacarDinheiro(&usuarioAtual, extrato);
 
-                        // switch (codigoDeRetorno)
-                        // {
-                        // case 0:
-                        //         menuAtual = SALDO;
-                        //         break;
-                        // case 1:
-                        //         printf("O valor digitado e invalido.\n\n");
-                        //         menuAtual = MENU;
-                        //         break;
-                        // case 2:
-                        //         printf("O valor de deposito nao pode ser negativo.\n\n");
-                        //         menuAtual = MENU;
-                        //         break;
-                        // }
+                        switch (codigoDeRetorno)
+                        {
+                        case 0:
+                                menuAtual = SALDO;
+                                break;
+                        case 1:
+                                printf("O valor digitado e invalido.\n\n");
+                                pressioneEnterParaContinuar();
+                                menuAtual = MENU;
+                                break;
+                        case 2:
+                                printf("O valor de saque nao pode ser negativo.\n\n");
+                                pressioneEnterParaContinuar();
+                                menuAtual = MENU;
+                                break;
+                        case 3:
+                                printf("O valor de saque nao pode exceder seu saldo.\n\n");
+                                pressioneEnterParaContinuar();
+                                menuAtual = MENU;
+                                break;
+                        }
                         break;
                 case COMPRA:
                         menuAtual = MENU;
@@ -207,7 +218,7 @@ int main(void)
                 break;
         }
 
-        codigoDeRetorno = salvarListaDeUsuarios(bancoDeDados, listaDeUsuarios);
+        codigoDeRetorno = salvarUsuario(bancoDeDados, &usuarioAtual, indiceDoUsuarioAtual, listaDeUsuarios->quantidadeDeUsuarios);
 
         if (codigoDeRetorno == 1)
                 printf("[ERRO]: Nao foi possivel salvar o banco de dados.\n\n");
