@@ -19,7 +19,7 @@ int main(void)
         Cotacao cotacao;
 
         FILE* bancoDeDados;
-        codigoDeRetorno = abrirArquivo(&bancoDeDados, "database.bin");
+        codigoDeRetorno = abrirArquivo(&bancoDeDados, "usuarios.bin");
 
         FILE* arquivoDeExtratos;
         codigoDeRetorno = abrirArquivo(&arquivoDeExtratos, "extratos.bin");

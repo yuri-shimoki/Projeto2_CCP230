@@ -49,3 +49,22 @@ int checarExistenciaDoUsuario(ListaDeUsuarios* listaDeUsuarios, char* cpf, char*
 int abrirArquivo(FILE** arquivo, const char* nome);
 
 void obterDataEHoraAtuais(char* data, char* hora);
+
+// Funções de administrador ----------------------------------
+typedef struct
+{
+        char nome[65];
+        float cotacao, taxaDeCompra, taxaDeVenda;
+} Criptomoeda;
+
+typedef struct
+{
+        unsigned int quantidade;
+        Criptomoeda* criptomoedas;
+} ListaDeCriptomoedas;
+
+int admCadastrarUsuario(ListaDeUsuarios* listaDeUsuarios);
+int admExcluirUsuario(ListaDeUsuarios* listaDeUsuarios);
+
+int admCadastrarCriptomoeda(ListaDeCriptomoedas* listaDeCriptomoedas);
+int admExcluirCriptomoeda(ListaDeCriptomoedas* listaDeCriptomoedas);
