@@ -14,15 +14,19 @@ Para compilar o projeto, primeiramente utilize o comando:
 
 Para ir até a pasta raiz do projeto, e, em seguida, utilize o comando:
 
-```gcc -Ofast -I headers src/*.c -o aplicativo```
+```gcc -Ofast -I headers src/investidor/*.c -o aplicativo```
 
-Para compilar o projeto e produzir um executável chamado `aplicativo.exe`, no Windows.
+Para compilar o programa de usuário investidor, e utilize o comando:
 
-Após isso, para executar o programa, basta escrever a seguinte linha no terminal:
+```gcc -Ofast -I headers src/administrador/*.c -o aplicativo```
+
+Para compilar o programa de usuário administrador. Em ambos os casos, um executável `aplicativo.exe` será produzido no Windows.
+
+para executar o programa, basta escrever a seguinte linha no terminal:
 
 ```.\aplicativo.exe```
 
-## Como Usar o Programa
+## Como Usar o Programa de Usuário Investidor
 
 O programa é dividido em menus. Cada menu irá lhe permitir visualizar uma certa informação ou realizar uma certa ação.
 
